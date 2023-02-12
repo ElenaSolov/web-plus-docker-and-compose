@@ -5,15 +5,13 @@ RUN npm i
 COPY . .
 RUN npm run build
 
-FROM node:16-alpine as production
+FROM node:16-alpine AS production
+RUN npm install pm2 -g
 WORKDIR /app
-# С помощью параметера --from указываем, что копировать нужно из образа builder
-# Копируем package.json и package-lock.json (потребуются для установки зависимостей)
 COPY --from=builder /app/package*.json ./
-# Устанавливаем только зависимости, необходимые в продакшене
 RUN npm i --omit=dev
-# Копируем директорию со сборкой приложения
+COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 COPY --from=builder /app/dist ./dist/
-
+EXPOSE 3001
 # Указываем команду для запуска приложения
-CMD ["node", "/dist/main.js"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]

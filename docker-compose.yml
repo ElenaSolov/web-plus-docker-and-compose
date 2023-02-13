@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 services:
   frontend:
     container_name: kpd-frontend
@@ -24,7 +24,6 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 40s
   db:
     image: "postgres"
     env_file:

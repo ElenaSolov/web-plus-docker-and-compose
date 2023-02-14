@@ -10,6 +10,8 @@ services:
   backend:
     container_name: kpd-backend
     build: ./backend
+    networks:
+      - backend-database
     restart: "unless-stopped"
     ports:
       - "4000:3001"
@@ -20,16 +22,13 @@ services:
     links:
       - db
   db:
+    container_name: kpd-db
     image: "postgres"
     env_file:
       - ./.env
+    networks:
+      - backend-database
     restart: unless-stopped
-    ports:
-      - "5432:5432"
-    environment:
-          - POSTGRES_USER=student
-          - POSTGRES_PASSWORD=student
-          - POSTGRES_DB=kupipodariday
     volumes:
      - db:/var/lib/postgresql/data
      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql

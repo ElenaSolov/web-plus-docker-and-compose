@@ -30,9 +30,9 @@ services:
       - backend-database
     restart: unless-stopped
     volumes:
-     - db:/var/lib/postgresql/data
-     - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
-
+      - ./pg_data:/var/lib/postgresql/data/pgdata
 volumes:
- db:
-   driver: local
+  pg_data:
+
+networks:
+  backend-database: {}

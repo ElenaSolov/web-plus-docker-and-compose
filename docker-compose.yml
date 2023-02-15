@@ -19,8 +19,6 @@ services:
           - ./.env
     depends_on:
       - db
-    links:
-      - db
   db:
     container_name: kpd-db
     image: "postgres"
@@ -30,9 +28,12 @@ services:
       - backend-database
     restart: unless-stopped
     volumes:
-      - ./pg_data:/var/lib/postgresql/data/pgdata
+      - pg_data:/var/lib/postgresql/data/pgdata
 volumes:
   pg_data:
+    driver: local
 
 networks:
   backend-database: {}
+
+
